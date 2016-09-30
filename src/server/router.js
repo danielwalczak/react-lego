@@ -1,6 +1,6 @@
 import express from 'express';
 import debug from 'debug';
-import slashes from 'connect-slashes';
+import static from 'koa-static';
 
 import setRouterContext from './middleware/set-router-context';
 import renderApp from './middleware/render-app';
@@ -18,13 +18,18 @@ routingApp.on('mount', (parent) => {
   ));
 });
 
+var publicFiles = static(PUBLIC);
+publicFiles._name = 'static /public';
+
+var distFiles = static(DIST);
+distFiles._name = 'static /dist';
+
 export function setRoutes(assets) {
   log('adding react routes');
 
   routingApp
-    .use('/', express.static(DIST, { maxAge: oneDay }))
-    .use('/', express.static(PUBLIC, { maxAge: oneDay }))
+    .use(static(publicFiles))
+    .use(static(distFiles))
     .use('/api', apiRouter)
-    .use(slashes())
     .get('*', setRouterContext, renderApp(assets));
 }
