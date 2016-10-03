@@ -70,7 +70,7 @@ describe('Server', function () {
       .end(done);
   });
 
-  it('Should gzip static assets', (done) => {
+  it('Should gzip koaStatic assets', (done) => {
     return supertest(server)
       .get('/app.js')
       .expect(200)
