@@ -6,9 +6,6 @@ import * as routes from '../../app/routes';
 
 const setRouterContext = () => {
   return function *setRouterContext(next) {
-    console.log(`this`, this)
-
-    console.log(`this.url`, this.url)
     match({
       routes: routes.makeRoutes(),
       location: this.url
@@ -19,8 +16,8 @@ const setRouterContext = () => {
         this.redirect(302, redirect.pathname + redirect.search);
       } else {
         // path * will return a 404
-        // const isNotFound = renderProps.routes.find((route) => route.path === '*');
-        // this.status(isNotFound ? 404 : 200);
+        const isNotFound = renderProps.routes.find((route) => route.path === '*');
+        this.response.status = isNotFound ? 404 : 200;
         this.routerContext = renderToString(<RouterContext {...renderProps} />);
       }
     });

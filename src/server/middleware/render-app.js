@@ -13,8 +13,6 @@ export default function renderAppWrapper(assets) {
         />
       );
     } catch (error) {
-      console.log(`this`, this)
-      console.log(`error`, error)
       this.body = this.render500(error);
     }
   };
