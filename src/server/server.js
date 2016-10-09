@@ -12,36 +12,35 @@ import Error500 from './templates/Error500';
 import webpackConfig from '../config/webpack.config.prod';
 import setRouterContext from './middleware/set-router-context';
 import renderApp from './middleware/render-app';
-
 import { DIST, PUBLIC } from '../config/paths';
-var publicFiles = koaStatic(PUBLIC);
-publicFiles._name = 'koaStatic /public';
-var distFiles = koaStatic(DIST);
-distFiles._name = 'koaStatic /dist';
 
+const server = koa();
+const log = debug('lego:server.js');
+log('starting');
+const publicFiles = koaStatic(PUBLIC);
+publicFiles._name = 'koaStatic /public'; // eslint-disable-line no-underscore-dangle
+const distFiles = koaStatic(DIST);
+distFiles._name = 'koaStatic /dist'; // eslint-disable-line no-underscore-dangle
 
 const webpackEntries = Object.keys(webpackConfig.entry);
 const assets = {
   javascript: webpackEntries.map((entry) => `/${entry}.js`),
   styles: webpackEntries.map((entry) => `/${entry}.css`)
 };
-const server = koa();
-const log = debug('lego:server.js');
-log('starting');
 
-const addRenderFunctions = () => {
-  return function *addRenderFunctions(next) {
-    this.renderPageToString = (page) => {
+function addRenderFunctions() {
+  return function* genAddRenderFunctions(next) {
+    this.renderPageToString = function renderPageToString(page) {
       return `<!doctype html>${renderToString(page)}`;
     };
-    this.render500 = (e) => {
+    this.render500 = function render500(e) {
       log('render500', e);
       this.response.status = 500;
       return this.renderPageToString(<Error500 />);
     };
     yield next;
-  }
-};
+  };
+}
 
 server.use(responseTime());
 server.use(compress({ threshold: 2048 }));

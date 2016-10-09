@@ -2,7 +2,7 @@ import React from 'react';
 import Html from '../templates/Html';
 
 export default function renderAppWrapper(assets) {
-  return function *renderApp(next) {
+  return function* genRenderApp(next) {
     yield next;
     try {
       this.body = this.renderPageToString(

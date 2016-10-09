@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
-export default function headers(){
-  return function *headers(next) {
+export default function headers() {
+  return function* genHeaders(next) {
     yield next;
     if (this.body) {
       this.set('Content-Length', this.body.length.toString());
@@ -10,5 +10,5 @@ export default function headers(){
       this.set('Expires', 0);
       this.set('etag', crypto.createHash('md5').update(this.body).digest('hex'));
     }
-  }
+  };
 }

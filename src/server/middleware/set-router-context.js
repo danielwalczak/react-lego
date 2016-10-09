@@ -1,11 +1,10 @@
-/* eslint-disable no-param-reassign */
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
 import * as routes from '../../app/routes';
 
-const setRouterContext = () => {
-  return function *setRouterContext(next) {
+function setRouterContext() {
+  return function* genSetRouterContext(next) {
     match({
       routes: routes.makeRoutes(),
       location: this.url
@@ -23,6 +22,6 @@ const setRouterContext = () => {
     });
     yield next;
   };
-};
+}
 
 export default setRouterContext;
