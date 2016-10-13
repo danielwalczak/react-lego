@@ -100,6 +100,6 @@
     "sinon": "^1.17.3",
     "supertest": "^2.0.0",
     "webpack-dev-middleware": "^1.8.3",
-    "webpack-dev-server": "^2.1.0-beta.8",
+    "webpack-dev-server": "^2.1.0-beta.8"
   }
 }
